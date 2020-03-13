@@ -2,17 +2,21 @@
 % Please edit documentation in R/residuals-comparison.R
 \name{tobitResidualsNO}
 \alias{tobitResidualsNO}
-\title{Monte Carlo simulations}
+\title{Envelope - tobit normal}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+tobitResidualsNO(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
 }
 \arguments{
-\item{tau}{If is TRUE print the output.}
+\item{model}{an object of class formula.}
 
-\item{y}{shape parameter.}
+\item{nboot}{number of bootrstrap replicates.}
 
-\item{status}{Monte Carlo replications.}
+\item{alpha}{Confidence level for the interval.}
+
+\item{tau}{Is a prefixed limiting values. Default for ZERO.}
+
+\item{intercept}{logical. Should an intercept be included in the null model?}
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
 }

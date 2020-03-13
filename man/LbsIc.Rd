@@ -2,17 +2,10 @@
 % Please edit documentation in R/estimation-mixture-logit-birnbaum-saunders.R
 \name{LbsIc}
 \alias{LbsIc}
-\title{Monte Carlo simulations}
+\title{Fitting Linear Models - CI}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-}
-\arguments{
-\item{y}{shape parameter.}
-
-\item{tau}{If is TRUE print the output.}
-
-\item{status}{Monte Carlo replications.}
+LbsIc(X1, X2, y, tau = 0.1, status, coef1, coef2, alphahat)
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+Fitting Linear Models - CI
 }

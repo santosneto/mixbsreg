@@ -2,17 +2,10 @@
 % Please edit documentation in R/auxiliary-functions.R
 \name{tobitLSVectorY}
 \alias{tobitLSVectorY}
-\title{Monte Carlo simulations}
+\title{Response tobit}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-}
-\arguments{
-\item{tau}{If is TRUE print the output.}
-
-\item{y}{shape parameter.}
-
-\item{status}{Monte Carlo replications.}
+tobitLSVectorY(t, tau)
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+Response tobit
 }

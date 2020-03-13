@@ -2,17 +2,23 @@
 % Please edit documentation in R/residuals-comparison.R
 \name{CoxSnell_BSmixture}
 \alias{CoxSnell_BSmixture}
-\title{Monte Carlo simulations}
+\title{Residuals - mixture Bernoulli/Birnbaum-Saunders}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+CoxSnell_BSmixture(x,X1,X2,theta,status,tau)
 }
 \arguments{
-\item{status}{Monte Carlo replications.}
+\item{x}{response variable.}
 
-\item{tau}{If is TRUE print the output.}
+\item{X1}{model matrix.}
 
-\item{y}{shape parameter.}
+\item{X2}{model matrix.}
+
+\item{theta}{estimative of the parameters.}
+
+\item{status}{The status indicator, normally 0=alive, 1=dead.}
+
+\item{tau}{Is a prefixed limiting values. Default for ZERO.}
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+CoxSnell_BSmixture  is a function which extracts model residuals from Bernoulli/Birnbaum-Saunders model.
 }

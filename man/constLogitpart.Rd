@@ -2,17 +2,24 @@
 % Please edit documentation in R/initial-point-logitpart-const.R
 \name{constLogitpart}
 \alias{constLogitpart}
-\title{Monte Carlo simulations}
+\title{Fitting Linear Models - Constat}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-}
-\arguments{
-\item{y}{shape parameter.}
-
-\item{tau}{If is TRUE print the output.}
-
-\item{status}{Monte Carlo replications.}
+constLogitpart(
+  X1,
+  X2,
+  y,
+  coef1,
+  alphahat,
+  from,
+  to,
+  by,
+  tau,
+  status = status,
+  ylim = c(0, 2000),
+  xlim = c(0, 100),
+  plot = TRUE
+)
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+Fitting Linear Models - Constat
 }

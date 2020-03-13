@@ -1,17 +1,4 @@
-#' Monte Carlo simulations
-#'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
-#'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-#'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' Fitting Linear Models - Constat
 #'
 #'@export
 

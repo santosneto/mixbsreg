@@ -2,17 +2,27 @@
 % Please edit documentation in R/residuals-comparison.R
 \name{tobitResidualsEnvelopeBSBernoulli}
 \alias{tobitResidualsEnvelopeBSBernoulli}
-\title{Monte Carlo simulations}
+\title{Envelope - mixture Bernoulli/Birnbaum-Saunders}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+tobitResidualsEnvelopeBSBernoulli(y,X1,X2,theta,status,tau,nboot = 19,alpha=0.05)
 }
 \arguments{
-\item{y}{shape parameter.}
+\item{y}{response variable.}
 
-\item{status}{Monte Carlo replications.}
+\item{X1}{model matrix.}
 
-\item{tau}{If is TRUE print the output.}
+\item{X2}{model matrix.}
+
+\item{theta}{estimative of the parameters.}
+
+\item{status}{The status indicator, normally 0=alive, 1=dead.}
+
+\item{tau}{Is a prefixed limiting values. Default for ZERO.}
+
+\item{nboot}{number of bootrstrap replicates.}
+
+\item{alpha}{Confidence level for the interval.}
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
 }

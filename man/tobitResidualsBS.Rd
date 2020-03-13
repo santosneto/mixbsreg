@@ -2,17 +2,19 @@
 % Please edit documentation in R/residuals-comparison.R
 \name{tobitResidualsBS}
 \alias{tobitResidualsBS}
-\title{Monte Carlo simulations}
+\title{Residuals - tobit bs}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+tobitResidualsBS(y,alphahat,muhat,status)
 }
 \arguments{
-\item{y}{shape parameter.}
+\item{y}{response variable.}
 
-\item{status}{Monte Carlo replications.}
+\item{alphahat}{estimative of the shape parameter.}
 
-\item{tau}{If is TRUE print the output.}
+\item{muhat}{fitted values.}
+
+\item{status}{The status indicator, normally 0=alive, 1=dead.}
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+tobitResidualsBS is a function which extracts model residuals from tobit-bs.
 }

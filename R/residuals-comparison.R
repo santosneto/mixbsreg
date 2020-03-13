@@ -2,20 +2,17 @@
 require(VGAM)
 require(rootSolve)
 
-#' Monte Carlo simulations
+#' Envelope - tobit normal
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage tobitResidualsNO(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' @param model an object of class formula.
+#' @param nboot number of bootrstrap replicates.
+#' @param alpha Confidence level for the interval.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param intercept logical. Should an intercept be included in the null model?
 #'
 #'@export
 
@@ -100,39 +97,48 @@ tobitResidualsNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TR
 
 
 
-#' Monte Carlo simulations
+#' Residuals - tobit bs
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description tobitResidualsBS is a function which extracts model residuals from tobit-bs.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage tobitResidualsBS(y,alphahat,muhat,status)
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
+#' @param y response variable.
+#' @param alphahat estimative of the shape parameter.
+#' @param muhat fitted values.
+#' @param status The status indicator, normally 0=alive, 1=dead.
 #'
 #'
 #'@export
-#'
-#'
-
-###################################################################
-#                   Residuals - Birnbaum-Saunders
-###################################################################
 
 tobitResidualsBS <- function(y,alphahat,muhat,status){
 
   sfBS    <- 1-pnorm((2/alphahat)*sinh((y-muhat)/2))
   rCS     <- -log(sfBS)
 
-  result  <- list( rCS = rCS
-  )
+  result  <- list( rCS = rCS)
   return(result)
 }
 
+
+#' Envelope - tobit Birnbaum-Saunders
+#'
+#' @description This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
+#'
+#' @usage tobitResidualsEnvelopeBS(X,y,muhat,alphahat,n,k,status,nboot = 19,alpha=0.05)
+#'
+#' @param y response variable.
+#' @param X model matrix.
+#' @param alphahat estimative of the shape parameter.
+#' @param muhat fitted values.
+#' @param model an object of class formula.
+#' @param nboot number of bootrstrap replicates.
+#' @param k number.
+#' @param n sample size.
+#' @param status The status indicator, normally 0=alive, 1=dead.
+#' @param alpha Probability level for the interval.
+#'
+#'@export
 
 tobitResidualsEnvelopeBS <- function(X,y,muhat,alphahat,n,k,status,nboot = 19,alpha=0.05)
 {
@@ -193,22 +199,20 @@ tobitResidualsEnvelopeBS <- function(X,y,muhat,alphahat,n,k,status,nboot = 19,al
 }
 
 
-#' Monte Carlo simulations
+#' Envelope - tobit t
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage envelopet(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' @param model an object of class formula.
+#' @param nboot number of bootrstrap replicates.
+#' @param alpha Confidence level for the interval.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param intercept logical. Should an intercept be included in the null model?
 #'
 #'@export
+
 
 envelopet <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
 {
@@ -292,27 +296,21 @@ envelopet <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
 
 
 
-
-#' Monte Carlo simulations
+#' Residuals - mixture Bernoulli/Birnbaum-Saunders
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description CoxSnell_BSmixture  is a function which extracts model residuals from Bernoulli/Birnbaum-Saunders model.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage CoxSnell_BSmixture(x,X1,X2,theta,status,tau)
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
+#' @param x response variable.
+#' @param X1  model matrix.
+#' @param X2  model matrix.
+#' @param theta estimative of the parameters.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param status The status indicator, normally 0=alive, 1=dead.
 #'
 #'
 #'@export
-
-###################################################################
-#                   Residuals - Birnbaum-Saunders/Bernoulli
-###################################################################
 
 
 CoxSnell_BSmixture <- function(x,X1,X2,theta,status,tau){
@@ -341,24 +339,22 @@ CoxSnell_BSmixture <- function(x,X1,X2,theta,status,tau){
 
 
 
-
-#' Monte Carlo simulations
+#' Envelope - mixture Bernoulli/Birnbaum-Saunders
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage tobitResidualsEnvelopeBSBernoulli(y,X1,X2,theta,status,tau,nboot = 19,alpha=0.05)
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' @param y response variable.
+#' @param X1  model matrix.
+#' @param X2  model matrix.
+#' @param theta estimative of the parameters.
+#' @param nboot number of bootrstrap replicates.
+#' @param status The status indicator, normally 0=alive, 1=dead.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param alpha Confidence level for the interval.
 #'
 #'@export
-
 
 tobitResidualsEnvelopeBSBernoulli <- function(y,X1,X2,theta,status,tau,nboot = 19,alpha=0.05)
 {

@@ -2,17 +2,31 @@
 % Please edit documentation in R/estimation-birnbaum-saunders.R
 \name{tobitbs}
 \alias{tobitbs}
-\title{Monte Carlo simulations}
+\title{Fitting Linear Models - tobit bs}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+tobitbs(X,y,status,tau=0,k,initialpoint,method="BFGS",iterations=10000,hessian="TRUE",logtau="FALSE")
 }
 \arguments{
-\item{y}{shape parameter.}
+\item{X}{The model matrix.}
 
-\item{status}{Monte Carlo replications.}
+\item{y}{The response used.}
 
-\item{tau}{If is TRUE print the output.}
+\item{status}{The status indicator, normally 0=alive, 1=dead.}
+
+\item{tau}{Is a prefixed limiting values. Default for ZERO.}
+
+\item{k}{value.}
+
+\item{initialpoint}{Initial values for the parameters to be optimized over.}
+
+\item{method}{The method to be used. The default is BFGS.}
+
+\item{iterations}{The maximum number of iterations. Default to 10000.}
+
+\item{hessian}{Logical. Should a numerically differentiated Hessian matrix be returned?}
+
+\item{logtau}{Logical. Default for FALSE.}
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+Lbs is used to fit mixture model.
 }

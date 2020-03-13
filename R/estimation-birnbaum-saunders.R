@@ -1,16 +1,19 @@
-#' Monte Carlo simulations
+#' Fitting Linear Models - tobit bs
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description Lbs is used to fit mixture model.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage tobitbs(X,y,status,tau=0,k,initialpoint,method="BFGS",iterations=10000,hessian="TRUE",logtau="FALSE")
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
+#' @param X The model matrix.
+#' @param y The response used.
+#' @param status The status indicator, normally 0=alive, 1=dead.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param k value.
+#' @param initialpoint Initial values for the parameters to be optimized over.
+#' @param method The method to be used. The default is BFGS.
+#' @param iterations The maximum number of iterations. Default to 10000.
+#' @param hessian Logical. Should a numerically differentiated Hessian matrix be returned?
+#' @param logtau Logical. Default for FALSE.
 #'
 #'
 #'@export

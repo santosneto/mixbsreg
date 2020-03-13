@@ -1,24 +1,17 @@
-#' Monte Carlo simulations
+#' Descriptive Measures
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description Central and dispersion measures.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage descriptiveSummary(x)
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
+#' @param x data.
 #'
+#'@importFrom moments kurtosis skewness
 #'
 #'@export
 
 descriptiveSummary <- function(x){
   n            <- length(x)
-  skewness     <- (1 / n) * sum(((x - mean(x)) / sd(x)) ^ 3)
-  kurtosis     <- ((1 / n) * sum(((x - mean(x)) / sd(x)) ^ 4) - 3 )
   cVariation   <- (sd(x) / mean(x))
   statistics   <- list(minimum              = round(min(x), 3),
                        median               = round(median(x), 3),
@@ -34,19 +27,7 @@ descriptiveSummary <- function(x){
 }
 
 
-#' Monte Carlo simulations
-#'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
-#'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-#'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
+#' Response tobit
 #'
 #'
 #'@export
@@ -70,20 +51,7 @@ stop("Logarithmic functions are not defined for values less than or equal to zer
 }
 
 
-#' Monte Carlo simulations
-#'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
-#'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-#'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' Status Vector
 #'
 #'@export
 
@@ -105,20 +73,15 @@ stop("Logarithmic functions are not defined for values less than or equal to zer
   return(status)
 }
 
-#' Monte Carlo simulations
+#' Initial Values
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description Initial values for the parameters to be optimizes over.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage initialValuesLS(y,X,status)
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' @param y The response variable.
+#' @param X The model matrix.
+#' @param status The status indicator, normally 0=alive, 1=dead.
 #'
 #'@export
 
@@ -147,20 +110,15 @@ initialValuesLS <- function(y,X,status){
   return(result)
 }
 
-#' Monte Carlo simulations
+#' Initial Values for Birnbaum-Saunders model
 #'
-#' @description In this function, we evaluate the performance of the mixture model through MC simulations.
+#' @description Initial values for the parameters to be optimizes over.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage initialValuesLS(y,X,status)
 #'
-#' @param X.
-#' @param y shape parameter.
-#' @param status Monte Carlo replications.
-#' @param tau If is TRUE print the output.
-#' @param initialpoint
-#' @param method
-#' @iterations
-#'
+#' @param y The response variable.
+#' @param X The model matrix.
+#' @param status The status indicator, normally 0=alive, 1=dead.
 #'
 #'@export
 

@@ -2,17 +2,10 @@
 % Please edit documentation in R/auxiliary-functions.R
 \name{tobitLSVectorStatus}
 \alias{tobitLSVectorStatus}
-\title{Monte Carlo simulations}
+\title{Status Vector}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
-}
-\arguments{
-\item{tau}{If is TRUE print the output.}
-
-\item{y}{shape parameter.}
-
-\item{status}{Monte Carlo replications.}
+tobitLSVectorStatus(t, tau)
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+Status Vector
 }

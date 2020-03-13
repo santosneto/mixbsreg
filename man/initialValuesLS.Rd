@@ -2,17 +2,17 @@
 % Please edit documentation in R/auxiliary-functions.R
 \name{initialValuesLS}
 \alias{initialValuesLS}
-\title{Monte Carlo simulations}
+\title{Initial Values}
 \usage{
-Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+initialValuesLS(y,X,status)
 }
 \arguments{
-\item{y}{shape parameter.}
+\item{y}{The response variable.}
 
-\item{status}{Monte Carlo replications.}
+\item{X}{The model matrix.}
 
-\item{tau}{If is TRUE print the output.}
+\item{status}{The status indicator, normally 0=alive, 1=dead.}
 }
 \description{
-In this function, we evaluate the performance of the mixture model through MC simulations.
+Initial values for the parameters to be optimizes over.
 }
