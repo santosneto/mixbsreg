@@ -2,21 +2,145 @@
 #'
 #' @description Lbs is used to fit mixture model.
 #'
-#' @usage Lbs(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage Lbs0(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage Lbs(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE")
 #'
-#' @param X The model matrix.
+#' @param X1 The model matrix.
+#' @param X2 The model matrix.
 #' @param y The response used.
 #' @param status The status indicator, normally 0=alive, 1=dead.
 #' @param tau Is a prefixed limiting values. Default for ZERO.
 #' @param initialpoint Initial values for the parameters to be optimized over.
 #' @param method The method to be used. The default is BFGS.
 #' @param iterations The maximum number of iterations. Default to 10000.
+#' @param hessian Logical. Should a numerically differentiated Hessian matrix be returned?
 #'
 #'
 #'@export
 
 
-Lbs <- function(X,y,status,tau=0,initialpoint,method="BFGS",
+Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
+
+
+
+  k1  <- ncol(X1)
+  k2  <- ncol(X2)
+
+
+  LogLik <- function(theta){
+
+    theta1     <- theta[1:k1]
+    theta2     <- theta[(k1+1):(k1+k2)]
+    theta3     <- theta[((k1+k2)+1)]
+    mu1        <- (X1 %*% theta1)
+    mu2        <- (X2 %*% theta2)
+    zetai1     <- (2 / theta3) * cosh((y - mu1) / 2) #Nao censurado
+    zetai2     <- (2 / theta3) * sinh((y - mu1) / 2) #Nao censurado
+    zetaic2    <- (2 / theta3) * sinh((log(tau) - mu1) / 2) #censurado
+
+    result1 <- sum((1-status)*(log(1 + ( exp(mu2) * pnorm(zetaic2) ))  - log(1 + exp(mu2) ) ) + status * (-log(2) - (log(2 * pi) / 2) + (mu2) +
+                                                                                                            log(zetai1) - ((1 / 2) * (zetai2 ^ 2))- log(1 + (exp(mu2)))   )    )
+
+
+    return(-result1)
+  }
+
+  score <- function(theta){
+
+    theta1   <- theta[1:k1]
+    theta2   <- theta[(k1+1):(k1+k2)]
+    theta3   <- theta[((k1+k2)+1)]
+    mu1      <- (X1 %*% theta1)
+    mu2      <- (X2 %*% theta2)
+    zetai1   <- (2 / theta3) * cosh((y  - mu1) / 2) #Nao censurado
+    zetai2   <- (2 / theta3) * sinh((y  - mu1) / 2) #Nao censurado
+    zetaic1  <- (2 / theta3) * cosh((log(tau) - mu1) / 2) #censurado
+    zetaic2  <- (2 / theta3) * sinh((log(tau) - mu1) / 2) #censurado
+
+
+    Ualpha      <-  sum(((1-status)*(-1/theta3)*(exp(mu2)*dnorm(zetaic2)*zetaic2)/(1+(exp(mu2)*(pnorm(zetaic2)))))+((status)*(1/theta3)*((zetai2^2)-1)))
+
+    Utheta1     <-  (1-status)*((-1/2)*((dnorm(zetaic2)*zetaic1*exp(mu2))/log(1+(exp(mu2)*(pnorm(zetaic2))))))
+    + ((status)*(1/2)*((zetai1*zetai2)-(zetai2/zetai1)))
+
+
+    Utheta2     <-  (1-status)*((exp(mu2)*(pnorm(zetaic2)))/(1+(exp(mu2)*((pnorm(zetaic2)))))  - (exp(mu2)/(1+exp(mu2))))
+    + (status)*(1-(exp(mu2)/(1+exp(mu2))))
+
+    result2     <- c(t(X1) %*% Utheta1,t(X2) %*% Utheta2, Ualpha)
+
+    result2
+  }
+
+  ## est <- optim(initialpoint, LogLik,score,method = method, hessian = hessian)
+  est <- optim(initialpoint, LogLik ,method = method, hessian = hessian)
+
+  if(est$conv != 0)
+    warning("FUNCTION DID NOT CONVERGE!")
+
+  hessian             <- est$hessian
+  I                   <- -solve(hessian)
+
+  coef1               <- (est$par)[1:k1]
+  coef2               <- (est$par)[(k1+1):(k1+k2)]
+  alphahat            <- est$par[((k1+k2)+1)]
+
+  stderrorsb1         <- sqrt(diag(abs(I)))[1:k1]
+  stderrorsb2         <- sqrt(diag(abs(I)))[(k1+1):(k1+k2)]
+  stderroralpha       <- sqrt(diag(abs(I)))[((k1+k2)+1)]
+
+  zstats1             <- coef1 / stderrorsb1
+  pvalues1            <- 2 * (1 - pnorm(abs(coef1 / stderrorsb1)))
+
+  zstats2             <- coef2 / stderrorsb2
+  pvalues2            <- 2 * (1 - pnorm(abs(coef2 / stderrorsb2)))
+
+  pvaluea             <- 2 * (1 - pnorm(abs(alphahat / stderroralpha)))
+  conv  <- est$conv
+
+
+
+  result3 <- list( #est      = est,
+    #value    = est$value,
+    #conv     = conv,
+    coef1    = coef1,
+    coef2    = coef2,
+    alphahat = alphahat,
+    #I        = I,
+    stderrorsb1 = stderrorsb1,
+    stderrorsb2 = stderrorsb2,
+    stderroralpha = stderroralpha,
+    #zstats1 = zstats1,
+    #zstats2 = zstats2,
+    pvalues1 = pvalues1,
+    pvalues2 = pvalues2,
+    pvaluea = pvaluea
+  )
+  return(result3)
+}
+
+
+#' Fitting Linear Models
+#'
+#' @description Lbs is used to fit mixture model.
+#'
+#' @usage Lbs0(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
+#' @usage Lbs(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE")
+#'
+#' @param X1 The model matrix.
+#' @param X2 The model matrix.
+#' @param y The response used.
+#' @param status The status indicator, normally 0=alive, 1=dead.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param initialpoint Initial values for the parameters to be optimized over.
+#' @param method The method to be used. The default is BFGS.
+#' @param iterations The maximum number of iterations. Default to 10000.
+#' @param hessian Logical. Should a numerically differentiated Hessian matrix be returned?
+#'
+#'
+#'@export
+
+Lbs0 <- function(X,y,status,tau=0,initialpoint,method="BFGS",
                iterations=10000){
 
     X1  <- X
@@ -180,7 +304,7 @@ while(cont < NREP) {
 
   start  <- c(b10,b11,b20,b21,alp) # initial values
 
-  opt    <- suppressWarnings(Lbs(X=X,y=ygerado,tau=tau,initialpoint = start,status=status))
+  opt    <- suppressWarnings(Lbs0(X=X,y=ygerado,tau=tau,initialpoint = start,status=status))
 
   if(opt$conv!=0){
 

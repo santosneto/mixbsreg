@@ -1,7 +1,3 @@
-
-require(VGAM)
-require(rootSolve)
-
 #' Envelope - tobit normal
 #'
 #' @description This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.

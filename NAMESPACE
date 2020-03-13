@@ -2,6 +2,7 @@
 
 export(CoxSnell_BSmixture)
 export(Lbs)
+export(Lbs0)
 export(LbsIc)
 export(LbsProfile)
 export(constLogitpart)
