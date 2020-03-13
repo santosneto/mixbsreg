@@ -105,7 +105,8 @@ Lbs<- function(X,y,status,tau=0,initialpoint,method="BFGS",
 #' @param nrep Monte Carlo replications.
 #' @param print If is TRUE print the output.
 #'
-#'@importFrom VGAM rbisa  R.utils printf
+#'@importFrom VGAM rbisa
+#'@importFrom R.utils printf
 #'
 #'@export
 
