@@ -4,7 +4,7 @@
 \alias{LbsIc}
 \title{Fitting Linear Models - CI}
 \usage{
-LbsIc(X1, X2, y, tau = 0.1, status, coef1, coef2, alphahat)
+LbsIc(model)
 }
 \description{
 Fitting Linear Models - CI

@@ -25,6 +25,8 @@ Lbs(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE")
 
 \item{hessian}{Logical. Should a numerically differentiated Hessian matrix be returned?}
 
+\item{X}{The model matrix.}
+
 \item{iterations}{The maximum number of iterations. Default to 10000.}
 }
 \description{

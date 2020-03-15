@@ -9,6 +9,8 @@ Lbs0(X,y,status,tau=0,initialpoint,method="BFGS",iterations=10000)
 Lbs(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE")
 }
 \arguments{
+\item{X}{The model matrix.}
+
 \item{y}{The response used.}
 
 \item{status}{The status indicator, normally 0=alive, 1=dead.}
