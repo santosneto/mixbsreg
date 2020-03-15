@@ -76,8 +76,8 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   if(est$conv != 0)
     warning("FUNCTION DID NOT CONVERGE!")
 
-  hessian             <- est$hessian
-  I                   <- -solve(hessian)
+  hessian             <- -as.matrix(est$hessian)
+  I                   <- solve(hessian)
 
   coef1               <- (est$par)[1:k1]
   coef2               <- (est$par)[(k1+1):(k1+k2)]
@@ -107,7 +107,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
     coef1    = coef1,
     coef2    = coef2,
     alphahat = alphahat,
-    #I        = I,
+    vcov        = I,
     stderrorsb1 = stderrorsb1,
     stderrorsb2 = stderrorsb2,
     stderroralpha = stderroralpha,
