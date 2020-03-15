@@ -7,6 +7,7 @@
 #'
 #' @param X1 The model matrix.
 #' @param X2 The model matrix.
+#' @param X The model matrix.
 #' @param y The response used.
 #' @param status The status indicator, normally 0=alive, 1=dead.
 #' @param tau Is a prefixed limiting values. Default for ZERO.
@@ -85,9 +86,9 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   coef2               <- (est$par)[(k1+1):(k1+k2)]
   alphahat            <- est$par[((k1+k2)+1)]
 
-  stderrorsb1         <- sqrt(diag(abs(I)))[1:k1]
-  stderrorsb2         <- sqrt(diag(abs(I)))[(k1+1):(k1+k2)]
-  stderroralpha       <- sqrt(diag(abs(I)))[((k1+k2)+1)]
+  stderrorsb1         <- sqrt(diag(I))[1:k1]
+  stderrorsb2         <- sqrt(diag(I))[(k1+1):(k1+k2)]
+  stderroralpha       <- sqrt(diag(I))[((k1+k2)+1)]
 
   zstats1             <- coef1 / stderrorsb1
   pvalues1            <- 2 * (1 - pnorm(abs(coef1 / stderrorsb1)))
@@ -97,7 +98,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
 
   pvaluea             <- 2 * (1 - pnorm(abs(alphahat / stderroralpha)))
   conv  <- est$conv
-
+  loglink_out <-  est$value
 
 
   result3 <- list( #est      = est,
@@ -114,7 +115,8 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
     #zstats2 = zstats2,
     pvalues1 = pvalues1,
     pvalues2 = pvalues2,
-    pvaluea = pvaluea
+    pvaluea = pvaluea,
+    loglink = loglink_out
   )
   return(result3)
 }
@@ -129,6 +131,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
 #'
 #' @param X1 The model matrix.
 #' @param X2 The model matrix.
+#' @param X  The model matrix.
 #' @param y The response used.
 #' @param status The status indicator, normally 0=alive, 1=dead.
 #' @param tau Is a prefixed limiting values. Default for ZERO.
