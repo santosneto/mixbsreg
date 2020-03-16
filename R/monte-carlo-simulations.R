@@ -30,17 +30,18 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
     theta1     <- theta[1:k1]
     theta2     <- theta[(k1+1):(k1+k2)]
     theta3     <- theta[((k1+k2)+1)]
+
     mu1        <- (X1 %*% theta1)
     mu2        <- (X2 %*% theta2)
+
     zetai1     <- (2 / theta3) * cosh((y - mu1) / 2) #Nao censurado
     zetai2     <- (2 / theta3) * sinh((y - mu1) / 2) #Nao censurado
     zetaic2    <- (2 / theta3) * sinh((log(tau) - mu1) / 2) #censurado
 
-    result1 <- sum((1-status)*(log(1 + ( exp(mu2) * pnorm(zetaic2) ))  - log(1 + exp(mu2) ) ) + status * (-log(2) - (log(2 * pi) / 2) + (mu2) +
-                                                                                                            log(zetai1) - ((1 / 2) * (zetai2 ^ 2))- log(1 + (exp(mu2)))   )    )
+    result1 <- sum((1-status)*(log(1 + ( exp(mu2) * pnorm(zetaic2) ))  - log(1 + exp(mu2) ) ) + status * (-log(2) - (log(2*pi)/2) + (mu2) + log(zetai1) - ((1 / 2) * (zetai2 ^ 2))- log(1 + (exp(mu2)))   )    )
 
 
-    return(-result1)
+    return(result1)
   }
 
   score <- function(theta){
@@ -71,7 +72,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   }
 
   ## est <- optim(initialpoint, LogLik,score,method = method, hessian = hessian)
-  est <- optim(initialpoint, LogLik ,gr=score,method = method, hessian = hessian)
+  est <- optim(initialpoint, LogLik ,gr=score,method = method, hessian = hessian,fnscale=-1)
 
   if(est$conv != 0)
     warning("FUNCTION DID NOT CONVERGE!")
