@@ -98,6 +98,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
 
   zstatsa             <- alphahat/stderroralpha
   pvaluea             <- 2*pt(abs(zstatsa), df, lower.tail = FALSE)
+
   conv  <- est$conv
   loglink_out <-  est$value
 
