@@ -13,14 +13,14 @@
 descriptiveSummary <- function(x){
   n            <- length(x)
   cVariation   <- (sd(x) / mean(x))
-  statistics   <- list(minimum              = round(min(x), 3),
-                       median               = round(median(x), 3),
-                       mean                 = round(mean(x), 3),
-                       maximum              = round(max(x), 3),
-                       standardDeviation    = round(sd(x), 3),
-                       coefficientVariation = round(cVariation * 100, 3),
-                       coefficientSkewness  = round(skewness(x), 3),
-                       coefficientKurtosis  = round(kurtosis(x), 3)
+  statistics   <- list(minimum              = min(x),
+                       median               = median(x),
+                       mean                 = mean(x),
+                       maximum              = max(x),
+                       standardDeviation    = sd(x),
+                       coefficientVariation = cVariation,
+                       coefficientSkewness  = skewness(x),
+                       coefficientKurtosis  = kurtosis(x)
                        #range                = round(max(x) - min(x), 3),
   )
   return(statistics)
