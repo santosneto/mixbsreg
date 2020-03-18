@@ -23,7 +23,7 @@
 Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   k1  <- ncol(X1)
   k2  <- ncol(X2)
-
+   n  <- length(y)
 
   LogLik <- function(theta){
 
@@ -81,20 +81,23 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   I                   <- solve(hessian)
 
   coef1               <- (est$par)[1:k1]
+  p_cont                   <- length(coef1)
   coef2               <- (est$par)[(k1+1):(k1+k2)]
+  p_log                  <- length(coef2)
   alphahat            <- est$par[((k1+k2)+1)]
-
+  p_disp              <- length(alphahat)
   stderrorsb1         <- sqrt(diag(I))[1:k1]
   stderrorsb2         <- sqrt(diag(I))[(k1+1):(k1+k2)]
   stderroralpha       <- sqrt(diag(I))[((k1+k2)+1)]
+  df                  <- n - p_log - p_cont - p_disp
+  zstats1             <- coef1/stderrorsb1
+  pvalues1            <- 2*pt(abs(zstats1), df, lower.tail = FALSE)
 
-  zstats1             <- coef1 / stderrorsb1
-  pvalues1            <- 2 * (1 - pnorm(abs(coef1 / stderrorsb1)))
+  zstats2             <- coef2/stderrorsb2
+  pvalues2            <- 2*pt(abs(zstats2 ), df, lower.tail = FALSE)
 
-  zstats2             <- coef2 / stderrorsb2
-  pvalues2            <- 2 * (1 - pnorm(abs(coef2 / stderrorsb2)))
-
-  pvaluea             <- 2 * (1 - pnorm(abs(alphahat / stderroralpha)))
+  zstatsa             <- alphahat/stderroralpha
+  pvaluea             <- 2*pt(abs(zstatsa), df, lower.tail = FALSE)
   conv  <- est$conv
   loglink_out <-  est$value
 
