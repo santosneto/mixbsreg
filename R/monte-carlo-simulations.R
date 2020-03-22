@@ -241,7 +241,7 @@ Lbs0 <- function(X,y,status,tau=0,initialpoint,method="BFGS",
 #'
 #'@export
 
-sim_mix_bs <- function(n=100,alpha=0.1,nrep=5000,print=FALSE)
+sim_mix_bs <- function(n=100,beta1=c(0.2,0.5),beta2=c(1,2),alpha=0.1,nrep=5000,print=FALSE)
 {
 #MC simulation logit/BS model
 NREP <- nrep
@@ -251,8 +251,8 @@ x <- runif(n)
 X <- cbind(1, x)
 
 #Setup for parameters
-beta1 <- c(0.2,0.5)
-beta2 <- c(1,2)
+beta1 <- beta1
+beta2 <- beta2
 alpha <- alpha
 
 beta10 <- 0.2
