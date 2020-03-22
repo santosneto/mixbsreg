@@ -285,9 +285,9 @@ while(cont < NREP) {
 
     cont <- cont + 1
 
-    prop <- (cont / NREP) * 100
-    if(prop==0 || prop==25 || prop==50 ||prop==75|| prop==100)
-    cat(paste(prop,"%"),"\n")
+  #  prop <- (cont / NREP) * 100
+   # if(prop==0 || prop==25 || prop==50 ||prop==75|| prop==100)
+  #  cat(paste(prop,"%"),"\n")
 
     x <- runif(n)
     X <- cbind(1, x)
