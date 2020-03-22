@@ -116,11 +116,10 @@ tobitResidualsLNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "T
   c <-  (1*(y>tau))
   muhat <- model$linear.predictors
   sigmahat <- model$scale
-  deltahat <-(y-muhat)/sigmahat
   X <- model.matrix(model)
   var.explic <- X[,-1]
 
-  S <- 1-pnorm(deltahat)
+  S <- 1-plnorm(y,muhat,sigmahat)
   rM <- c+log(S)
 
 
@@ -142,7 +141,7 @@ tobitResidualsLNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "T
 
     if(intercept == "FALSE"){form <- yestrela ~ var.explic - 1} else{form <- yestrela ~ var.explic}
 
-    model1 <- AER::tobit(form,left = tau)
+    model1 <- AER::tobit(form,left = tau,dist="loggaussian")
     muhat1 <- model1$linear.predictors
     sigmahat1 <- model1$scale
     #deltahat1 <- (yestrela - muhat1)/sigmahat1
