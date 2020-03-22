@@ -24,7 +24,7 @@ Data about a safety and immunogenecity study related to measles vaccines in Hait
 }
 \examples{
 data(haiti)
-hist(haiti$level)
+hist(haiti$IU)
 }
 \references{
 Moulton, L. H. and Halsey, N. A. (1995). A mixture model with detection limits for regression analyses of antibody response to vaccine. Biometrics, 51:1570–1578.

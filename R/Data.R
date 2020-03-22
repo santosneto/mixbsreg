@@ -25,5 +25,5 @@
 #'
 #' @examples
 #' data(haiti)
-#' hist(haiti$level)
+#' hist(haiti$IU)
 "haiti"
