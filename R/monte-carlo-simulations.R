@@ -255,10 +255,10 @@ beta1 <- beta1
 beta2 <- beta2
 alpha <- alpha
 
-beta10 <- 0.2
-beta11 <- 0.5
-beta20 <- 1
-beta21 <- 2
+beta10 <- beta1[1]
+beta11 <- beta1[2]
+beta20 <- beta2[1]
+beta21 <- beta2[2]
 
 mu1   <- as.vector(X%*%beta1)
 mu2   <- as.vector(X%*%beta2)
