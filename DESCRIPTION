@@ -7,7 +7,7 @@ Maintainer: Manoel Santos-Neto <santosnetoce@protonemail.com>
 Description: We derive a new continuous-discrete mixture regression model which is useful for describing 
              highly censored data. This mixture model employs the Birnbaum-Saunders and Bernoulli distribution. We estimate
              the corresponding parameters with the maximum likelihood method.
-Depends: R (>= 3.1.2), ggplot2, rootSolve, moments, AER
+Depends: R (>= 3.5.0), ggplot2, rootSolve, moments, AER
 License: GNU GPL v2
 Import: AER, moments
 Encoding: UTF-8
