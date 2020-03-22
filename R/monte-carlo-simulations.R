@@ -238,7 +238,6 @@ Lbs0 <- function(X,y,status,tau=0,initialpoint,method="BFGS",
 #' @param print If is TRUE print the output.
 #'
 #'@importFrom VGAM rbisa
-#'@importFrom R.utils printf
 #'
 #'@export
 
@@ -367,11 +366,11 @@ colnames(out_end) <- c('Mean','Bias','MSE')
 
 if(print == TRUE)
 {
-printf('Proportion of censored data: %0.2f \n',sum(status)/length(status))
-printf('MC Replications: %i \n',NREP)
-printf('Sample size: %i \n',n)
-printf('Shape: %0.1f \n',alpha)
-printf('Estimates: \n')
+sprintf('Proportion of censored data: %0.2f \n',sum(status)/length(status))
+sprintf('MC Replications: %i \n',NREP)
+sprintf('Sample size: %i \n',n)
+sprintf('Shape: %0.1f \n',alpha)
+sprintf('Estimates: \n')
 print(round(out_end,5))
 }else return(round(out_end,5))
 }
