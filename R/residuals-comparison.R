@@ -38,7 +38,7 @@ tobitResidualsNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TR
 
   for(i in 1:nboot){
 
-    ygerado  <- sigmahat*rnorm(n,0,1)+ muhat
+    ygerado  <- sigmahat*rnorm(n,0,1) + muhat
     n1  <- summary(model)$n[2] #n?mero de obs. cens.
     pc       <- n1/n  #propor??o de obs. cens.
     tau1      <- sort(ygerado)[pc*n]
@@ -47,7 +47,7 @@ tobitResidualsNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TR
 
     if(intercept == "FALSE"){form <- yestrela ~ var.explic - 1} else{form <- yestrela ~ var.explic}
 
-    model1 <- tobit(form,left = tau)
+    model1 <- AER::tobit(form,left = tau)
     muhat1 <- model1$linear.predictors
     sigmahat1 <- model1$scale
     deltahat1 <- (yestrela - muhat1)/sigmahat1
@@ -90,6 +90,102 @@ tobitResidualsNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TR
   par(new=T)
   qqplot(qexp(ppoints(500)),med,axes=F,type="l",main="",ylim=faixa,lty=2, xlab="", ylab="",col="black")
 }
+
+
+
+#' Envelope - tobit log normal
+#'
+#' @description This function calculates overall and pointwise confidence envelopes for a curve based on bootstrap replicates of the curve evaluated at a number of fixed points.
+#'
+#' @usage tobitResidualsLNO(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
+#'
+#' @param model an object of class formula.
+#' @param nboot number of bootrstrap replicates.
+#' @param alpha Confidence level for the interval.
+#' @param tau Is a prefixed limiting values. Default for ZERO.
+#' @param intercept logical. Should an intercept be included in the null model?
+#'
+#'@export
+
+
+tobitResidualsLNO <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
+{
+
+  n  <- summary(model)$n[1]
+  y  <- as.numeric(model$y)[1:n]
+  c <-  (1*(y>tau))
+  muhat <- model$linear.predictors
+  sigmahat <- model$scale
+  deltahat <-(y-muhat)/sigmahat
+  X <- model.matrix(model)
+  var.explic <- X[,-1]
+
+  S <- 1-pnorm(deltahat)
+  rM <- c+log(S)
+
+
+  rCS     <- -log(S)
+
+
+  alpha1 <- ceiling(nboot*alpha)
+  alpha2 <- ceiling(nboot*(1-alpha))
+  e <- matrix(0,n,nboot)
+
+  for(i in 1:nboot){
+
+    ygerado  <- exp(sigmahat*rnorm(n,0,1) + muhat)
+    n1  <- summary(model)$n[2] #n?mero de obs. cens.
+    pc       <- n1/n  #propor??o de obs. cens.
+    tau1      <- sort(ygerado)[pc*n]
+    yestrela <- ifelse(ygerado>tau1,ygerado,tau)
+    status   <- (1*(ygerado>tau1))
+
+    if(intercept == "FALSE"){form <- yestrela ~ var.explic - 1} else{form <- yestrela ~ var.explic}
+
+    model1 <- AER::tobit(form,left = tau)
+    muhat1 <- model1$linear.predictors
+    sigmahat1 <- model1$scale
+    #deltahat1 <- (yestrela - muhat1)/sigmahat1
+    S1 <- 1 - plnorm(yestrela,muhat1,sigmahat1)
+    rCS1<- -log(S1) # Res?duo componente do desvio Martingal
+
+    e[,i]    <- sort(rCS1)
+  }
+  e1<- numeric(n)
+  e2<- numeric(n)
+
+  for(j in 1:n){
+
+    eo    <- sort(e[j,])
+    e1[j] <- eo[alpha1]
+    e2[j] <- eo[alpha2]
+  }
+
+  a  <-  qqplot(qexp(ppoints(500)),e1,plot.it=FALSE)$x
+  a1 <-  qqplot(qexp(ppoints(500)),e1,plot.it=FALSE)$y
+  b  <-  qqplot(qexp(ppoints(500)),e2,plot.it=FALSE)$x
+  b1 <-  qqplot(qexp(ppoints(500)),e2,plot.it=FALSE)$y
+  r  <-  qqplot(qexp(ppoints(500)),rCS,plot.it=FALSE)$x
+  r1 <-  qqplot(qexp(ppoints(500)),rCS,plot.it=FALSE)$y
+
+  xx <- c(a,rev(b))
+  yy <- c(a1,rev(b1))
+  med   <- apply(e,1,mean)
+  faixa <- range(rCS,e1,e2,med)
+  par(mar=c(4.0,4.0,0.1,0.1))
+  plot(r,r1,type = "n", ylim=faixa,axes=FALSE,xlab="",ylab="")
+  par(new=T)
+  polygon(xx,yy,col="antiquewhite3",border=NA)
+  par(new=T)
+  qqplot(qexp(ppoints(500)),rCS,main="", ylim=faixa, ylab="Empirical Quantile",xlab="Theoretical Quantile", cex=0.7, pch=3)
+  par(new=T)
+  qqplot(qexp(ppoints(500)),e1,axes=F,type="l",main="",ylim=faixa,lty=1, xlab="", ylab="",col="gray")
+  par(new=T)
+  qqplot(qexp(ppoints(500)),e2,axes=F,type="l",main="",ylim=faixa,lty=1, xlab="", ylab="",col="gray")
+  par(new=T)
+  qqplot(qexp(ppoints(500)),med,axes=F,type="l",main="",ylim=faixa,lty=2, xlab="", ylab="",col="black")
+}
+
 
 
 
@@ -240,7 +336,7 @@ envelopet <- function(model,nboot = 19,alpha=0.01,tau=0.1,intercept = "TRUE")
 
     if(intercept == "FALSE"){form <- yestrela ~ var.explic - 1} else{form <- yestrela ~ var.explic}
 
-    model1 <- tobit(form,dist="t",left=tau)
+    model1 <- AER::tobit(form,dist="t",left=tau)
     muhat1 <- model1$linear.predictors
     sigmahat1 <- model1$scale
     deltahat1 <- (yestrela - muhat1)/sigmahat1
