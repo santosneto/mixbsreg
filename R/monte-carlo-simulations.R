@@ -366,11 +366,11 @@ colnames(out_end) <- c('Mean','Bias','MSE')
 
 if(print == TRUE)
 {
-sprintf('Proportion of censored data: %0.2f \n',sum(status)/length(status))
-sprintf('MC Replications: %i \n',NREP)
-sprintf('Sample size: %i \n',n)
-sprintf('Shape: %0.1f \n',alpha)
-sprintf('Estimates: \n')
+cat(sprintf('Proportion of censored data: %0.2f \n',sum(status)/length(status)))
+cat(sprintf('MC Replications: %i \n',NREP))
+cat(sprintf('Sample size: %i \n',n))
+cat(sprintf('Shape: %0.1f \n',alpha))
+cat(sprintf('Estimates: \n'))
 print(round(out_end,5))
 }else return(round(out_end,5))
 }
