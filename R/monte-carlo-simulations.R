@@ -20,7 +20,7 @@
 #'@export
 
 
-Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
+Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS"){
   k1  <- ncol(X1)
   k2  <- ncol(X2)
    n  <- length(y)
@@ -72,19 +72,19 @@ Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   }
 
   ## est <- optim(initialpoint, LogLik,score,method = method, hessian = hessian)
-  est <- optim(initialpoint, fn=LogLik ,gr=score,method = method, hessian = hessian,control=list(fnscale=-1))
+  est <- maxLik(start=initialpoint, logLik=LogLik ,grad=score,method = method)
 
-  if(est$conv != 0)
+  if(est$code > 2 )
     warning("FUNCTION DID NOT CONVERGE!")
 
   hessian             <- -as.matrix(est$hessian)
   I                   <- solve(hessian)
 
-  coef1               <- (est$par)[1:k1]
+  coef1               <- (est$coef)[1:k1]
   p_cont                   <- length(coef1)
-  coef2               <- (est$par)[(k1+1):(k1+k2)]
+  coef2               <- (est$coef)[(k1+1):(k1+k2)]
   p_log                  <- length(coef2)
-  alphahat            <- est$par[((k1+k2)+1)]
+  alphahat            <- est$coef[((k1+k2)+1)]
   p_disp              <- length(alphahat)
   stderrorsb1         <- sqrt(diag(I))[1:k1]
   stderrorsb2         <- sqrt(diag(I))[(k1+1):(k1+k2)]
@@ -100,7 +100,7 @@ Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   pvaluea             <- 2*pt(abs(zstatsa), df, lower.tail = FALSE)
 
   conv  <- est$conv
-  loglink_out <-  est$value
+  loglink_out <-  est$maxValue
 
 
   result3 <- list( #est      = est,
