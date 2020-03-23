@@ -2,7 +2,7 @@ Package: mixbsreg
 Type: Package
 Title: Mixture-based regression model with application to data with high censoring
 Version: 0.1.1
-Author: Manoel Santos-Neto, Helton Saulo, Victo Leiva and Mario Desousa
+Author: Manoel Santos-Neto[aut,cre], Helton Saulo[aut,cre], Victo Leiva[aut] and Mario Desousa[aut]
 Maintainer: Manoel Santos-Neto <santosnetoce@protonemail.com>
 Description: We derive a new continuous-discrete mixture regression model which is useful for describing 
              highly censored data. This mixture model employs the Birnbaum-Saunders and Bernoulli distribution. We estimate
