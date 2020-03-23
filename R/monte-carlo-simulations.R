@@ -20,7 +20,7 @@
 #'@export
 
 
-Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
+Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   k1  <- ncol(X1)
   k2  <- ncol(X2)
    n  <- length(y)
@@ -72,7 +72,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
   }
 
   ## est <- optim(initialpoint, LogLik,score,method = method, hessian = hessian)
-  est <- optim(initialpoint, LogLik ,method = method, hessian = hessian,control=list(fnscale=-1))
+  est <- optim(initialpoint, fn=LogLik ,gr=score,method = method, hessian = hessian,control=list(fnscale=-1))
 
   if(est$conv != 0)
     warning("FUNCTION DID NOT CONVERGE!")
