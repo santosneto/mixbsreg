@@ -22,7 +22,7 @@
 Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS"){
   k1  <- ncol(X1)
   k2  <- ncol(X2)
-   n  <- length(y)
+  n  <- length(y)
 
   LogLik <- function(theta){
 
@@ -71,58 +71,10 @@ Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS"){
   }
 
   ## est <- optim(initialpoint, LogLik,score,method = method, hessian = hessian)
-  est <- maxLik(start=initialpoint, logLik=LogLik ,grad=score,method = method)
-
-  if(est$code > 2 )
-    warning("FUNCTION DID NOT CONVERGE!")
-
-  hessian             <- -as.matrix(est$hessian)
-  I                   <- solve(hessian)
-
-  coef1               <- (est$coef)[1:k1]
-  p_cont                   <- length(coef1)
-  coef2               <- (est$coef)[(k1+1):(k1+k2)]
-  p_log                  <- length(coef2)
-  alphahat            <- est$coef[((k1+k2)+1)]
-  p_disp              <- length(alphahat)
-  stderrorsb1         <- sqrt(diag(I))[1:k1]
-  stderrorsb2         <- sqrt(diag(I))[(k1+1):(k1+k2)]
-  stderroralpha       <- sqrt(diag(I))[((k1+k2)+1)]
-  df                  <- n - p_log - p_cont - p_disp
-  zstats1             <- coef1/stderrorsb1
-  pvalues1            <- 2*pt(abs(zstats1), df, lower.tail = FALSE)
-
-  zstats2             <- coef2/stderrorsb2
-  pvalues2            <- 2*pt(abs(zstats2 ), df, lower.tail = FALSE)
-
-  zstatsa             <- alphahat/stderroralpha
-  pvaluea             <- 2*pt(abs(zstatsa), df, lower.tail = FALSE)
-
-  conv  <- est$conv
-  loglink_out <-  est$maxValue
+  est <- maxLik(start=initialpoint, logLik=LogLik,grad=score,method = method)
 
 
-  result3 <- list( #est      = est,
-    #value    = est$value,
-    x1     = X1,
-    x2     = X2,
-    status = status,
-    y =y,
-    coef1    = coef1,
-    coef2    = coef2,
-    alphahat = alphahat,
-    vcov        = I,
-    stderrorsb1 = stderrorsb1,
-    stderrorsb2 = stderrorsb2,
-    stderroralpha = stderroralpha,
-    #zstats1 = zstats1,
-    #zstats2 = zstats2,
-    pvalues1 = pvalues1,
-    pvalues2 = pvalues2,
-    pvaluea = pvaluea,
-    loglink = loglink_out
-  )
-  return(result3)
+  return(summary(est))
 }
 
 
