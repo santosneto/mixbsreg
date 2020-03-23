@@ -16,6 +16,7 @@
 #' @param iterations The maximum number of iterations. Default to 10000.
 #' @param hessian Logical. Should a numerically differentiated Hessian matrix be returned?
 #'
+#'@importFrom maxLik maxLik
 #'
 #'@export
 
