@@ -19,28 +19,30 @@
 #'@export
 
 
-Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS"){
+Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
+
+
+
   k1  <- ncol(X1)
   k2  <- ncol(X2)
-  n  <- length(y)
+
 
   LogLik <- function(theta){
 
     theta1     <- theta[1:k1]
     theta2     <- theta[(k1+1):(k1+k2)]
     theta3     <- theta[((k1+k2)+1)]
-
     mu1        <- (X1 %*% theta1)
     mu2        <- (X2 %*% theta2)
-
     zetai1     <- (2 / theta3) * cosh((y - mu1) / 2) #Nao censurado
     zetai2     <- (2 / theta3) * sinh((y - mu1) / 2) #Nao censurado
     zetaic2    <- (2 / theta3) * sinh((log(tau) - mu1) / 2) #censurado
 
-    result1 <- sum((1-status)*(log(1 + ( exp(mu2) * pnorm(zetaic2) ))  - log(1 + exp(mu2) ) ) + status * (-log(2) - (log(2*pi)/2) + (mu2) + log(zetai1) - ((1 / 2) * (zetai2 ^ 2))- log(1 + (exp(mu2)))   )    )
+    result1 <- sum((1-status)*(log(1 + ( exp(mu2) * pnorm(zetaic2) ))  - log(1 + exp(mu2) ) ) + status * (-log(2) - (log(2 * pi) / 2) + (mu2) +
+                                                                                                            log(zetai1) - ((1 / 2) * (zetai2 ^ 2))- log(1 + (exp(mu2)))   )    )
 
 
-    return(result1)
+    return(-result1)
   }
 
   score <- function(theta){
@@ -67,16 +69,54 @@ Lbs <- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS"){
 
     result2     <- c(t(X1) %*% Utheta1,t(X2) %*% Utheta2, Ualpha)
 
-    return(result2)
+    result2
   }
 
   ## est <- optim(initialpoint, LogLik,score,method = method, hessian = hessian)
-  est <- maxLik(start=initialpoint, logLik=LogLik,grad=score,method = method)
+  est <- optim(initialpoint, LogLik ,method = method, hessian = hessian)
+
+  if(est$conv != 0)
+    warning("FUNCTION DID NOT CONVERGE!")
+
+  OInf <- solve(est$hessian)
+  se   <- sqrt(diag(OInf))
+  coef1               <- (est$par)[1:k1]
+  coef2               <- (est$par)[(k1+1):(k1+k2)]
+  alphahat            <- (est$par)[((k1+k2)+1)]
+
+  stderrorsb1         <- se[1:k1]
+  stderrorsb2         <- se[(k1+1):(k1+k2)]
+  stderroralpha       <- se[((k1+k2)+1)]
+
+  zstats1             <- coef1 / stderrorsb1
+  pvalues1            <- 2 * (1 - pnorm(abs(coef1 / stderrorsb1)))
+
+  zstats2             <- coef2 / stderrorsb2
+  pvalues2            <- 2 * (1 - pnorm(abs(coef2 / stderrorsb2)))
+
+  pvaluea             <- 2 * (1 - pnorm(abs(alphahat / stderroralpha)))
+  conv  <- est$conv
 
 
-  return(summary(est))
+
+  result3 <- list( #est      = est,
+    #value    = est$value,
+    #conv     = conv,
+    coef1    = coef1,
+    coef2    = coef2,
+    alphahat = alphahat,
+    #I        = I,
+    stderrorsb1 = stderrorsb1,
+    stderrorsb2 = stderrorsb2,
+    stderroralpha = stderroralpha,
+    #zstats1 = zstats1,
+    #zstats2 = zstats2,
+    pvalues1 = pvalues1,
+    pvalues2 = pvalues2,
+    pvaluea = pvaluea
+  )
+  return(result3)
 }
-
 
 #' Fitting Linear Models
 #'

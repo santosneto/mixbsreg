@@ -23,11 +23,11 @@ Lbs(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE")
 
 \item{method}{The method to be used. The default is BFGS.}
 
+\item{hessian}{Logical. Should a numerically differentiated Hessian matrix be returned?}
+
 \item{X}{The model matrix.}
 
 \item{iterations}{The maximum number of iterations. Default to 10000.}
-
-\item{hessian}{Logical. Should a numerically differentiated Hessian matrix be returned?}
 }
 \description{
 Lbs is used to fit mixture model.
