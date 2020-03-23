@@ -100,7 +100,7 @@ Lbs<- function(X1,X2,y,status,tau=0,initialpoint,method="BFGS",hessian="TRUE"){
 
 
   result3 <- list( #est      = est,
-    #value    = est$value,
+    value    = -est$value,
     #conv     = conv,
     coef1    = coef1,
     coef2    = coef2,
